@@ -16,7 +16,7 @@ spring:
     open-in-view: false
     hibernate:
       # 'update' creates tables if missing but preserves existing data
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
