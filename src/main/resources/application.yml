@@ -5,17 +5,17 @@ spring:
   datasource:
     url: jdbc:mysql://mysql-13116c6c-banking-system-database.e.aivencloud.com:17788/defaultdb?sslMode=REQUIRED
     username: avnadmin
-    # Use environment variables for production security
+    # Value will be pulled from Render Environment Variables
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    # Forces Spring to wait for Hibernate to finish before running data.sql
+    # Essential: Forces Spring to wait for Hibernate tables before running data.sql
     defer-datasource-initialization: true
     show-sql: true
     open-in-view: false
     hibernate:
-      # 'update' is safer for cloud DBs; igit add src/main/resources/application.ymlt creates tables if missing but won't crash on 'drop' errors
+      # 'update' creates tables if missing but preserves existing data
       ddl-auto: update
     properties:
       hibernate:
@@ -24,20 +24,20 @@ spring:
 
   sql:
     init:
-      # 'always' ensures your big dataset is checked on every restart
+      # Runs data.sql on every startup
       mode: always
       data-locations: classpath:data.sql
-      # Critical: If a row already exists, it skips and continues rather than crashing
+      # Prevents crashes if the seed data already exists in the DB
       continue-on-error: true
 
   cache:
     type: simple
 
-# Custom property for your React Frontend connection
+# Used in your SecurityConfig for CORS
 app:
   frontend:
     url: ${FRONTEND_URL:http://localhost:5173}
 
-# Server configuration for Render deployment
+# Dynamic port binding for Render
 server:
   port: ${PORT:8080}
